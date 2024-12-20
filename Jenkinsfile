@@ -11,24 +11,24 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
         stage('Run Unit Tests') {
             steps {
-                sh 'npm test'
+                bat 'npm test'
             }
         }
         stage('Integration Testing') {
             steps {
                 echo 'Running integration tests...'
-                sh 'npm run integration-test' // Perintah ini disesuaikan dengan cara menjalankan integration test Anda
+                bat 'npm run integration-test' // Sesuaikan dengan perintah untuk menjalankan integration test Anda
             }
         }
         stage('Build') {
             steps {
                 echo 'Building the application...'
-                // Tambahkan perintah build jika diperlukan, misalnya: sh 'npm run build'
+                // Tambahkan perintah build jika diperlukan, misalnya: bat 'npm run build'
             }
         }
         stage('Deploy to Staging') {
@@ -38,7 +38,7 @@ pipeline {
             steps {
                 echo 'Deploying to staging server...'
                 sshagent(['your-ssh-credentials-id']) { // Pastikan Anda sudah menambahkan kredensial SSH di Jenkins
-                    sh 'ssh user@staging-server "cd /path/to/project && git pull && npm install && npm run build"'
+                    bat 'ssh user@staging-server "cd /path/to/project && git pull && npm install && npm run build"'
                 }
             }
         }
