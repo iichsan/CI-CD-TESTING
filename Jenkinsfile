@@ -19,16 +19,27 @@ pipeline {
                 sh 'npm test'
             }
         }
+        stage('Integration Testing') {
+            steps {
+                echo 'Running integration tests...'
+                sh 'npm run integration-test' // Perintah ini disesuaikan dengan cara menjalankan integration test Anda
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building the application...'
-                // Tambahkan perintah build jika diperlukan
+                // Tambahkan perintah build jika diperlukan, misalnya: sh 'npm run build'
             }
         }
-        stage('Deploy') {
+        stage('Deploy to Staging') {
+            when {
+                branch 'main' // Hanya lakukan deploy ke staging jika di branch 'main'
+            }
             steps {
-                echo 'Deploying the application...'
-                // Tambahkan perintah deploy jika diperlukan
+                echo 'Deploying to staging server...'
+                sshagent(['your-ssh-credentials-id']) { // Pastikan Anda sudah menambahkan kredensial SSH di Jenkins
+                    sh 'ssh user@staging-server "cd /path/to/project && git pull && npm install && npm run build"'
+                }
             }
         }
     }
@@ -36,12 +47,12 @@ pipeline {
         success {
             echo 'Pipeline finished successfully!'
             emailext subject: 'Build Succeeded', body: 'The build succeeded!',
-            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+            recipientProviders: [[$class: 'DevelopersRecipientProvider']] // Mengirim email kepada pengembang
         }
         failure {
             echo 'Pipeline failed!'
             emailext subject: 'Build Failed', body: 'The build failed.',
-            recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+            recipientProviders: [[$class: 'DevelopersRecipientProvider']] // Mengirim email jika build gagal
         }
     }
 }
