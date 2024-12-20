@@ -22,7 +22,15 @@ pipeline {
         stage('Integration Testing') {
             steps {
                 echo 'Running integration tests...'
-                bat 'npm run integration-test' // Sesuaikan dengan perintah untuk menjalankan integration test Anda
+                script {
+                    try {
+                        bat 'npm run integration-test' // Menjalankan integration test
+                    } catch (e) {
+                        echo 'Integration tests failed!'
+                        currentBuild.result = 'FAILURE' // Menandai build gagal jika integration test gagal
+                        throw e // Meneruskan kesalahan
+                    }
+                }
             }
         }
         stage('Build') {
