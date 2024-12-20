@@ -5,11 +5,7 @@
   },
   "scripts": {
     "test": "jest",
-<<<<<<< HEAD
     "integration-test": "jest --config=jest.integration.config.js"
-=======
-    "integration-test": "jest --config=jest.integration.config.js" 
->>>>>>> 015a9dc1fc25120eddf451659587281d963fe6c7
   },
   "dependencies": {
     "express": "^4.21.2"
